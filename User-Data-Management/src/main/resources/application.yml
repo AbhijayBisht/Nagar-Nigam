@@ -1,0 +1,59 @@
+server:
+  port: 8082
+#  address: 127.0.0.1
+
+spring:
+  application:
+    name: User-Data-Management
+  datasource:
+    url: jdbc:postgresql://localhost:5432/my_db
+    username: postgres
+    password: root
+  jpa:
+    properties:
+      hibernate:
+       dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  cloud:
+    discovery:
+      enabled: true
+  config:
+    import: configserver:http://localhost:8085
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+        - health
+  endpoint:
+    health:
+      show-details: always
+resilience4j:
+  circuitbreaker:
+    instances:
+      user_property_breaker:
+        register-health-indicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 6s
+        permittedNumberOfCallsInHalfOpenState: 5
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      user_property_retry:
+        max-attempts: 3
+        wait-duration: 5s
+  ratelimiter:
+    instances:
+      user_property_limiter: 
+        limit-refresh-period: 5s
+        limit-for-period: 5
+        timeout-duration: 3s

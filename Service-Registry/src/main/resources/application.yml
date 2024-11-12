@@ -1,0 +1,9 @@
+eureka:
+  instance:
+    ip-address: 127.0.0.1
+    prefer-ip-address: true
+  client:
+    fetch-registry: false
+    register-with-eureka: false
+server:
+  port: 8761

@@ -1,0 +1,23 @@
+server:
+  port: 8083
+#  address: 127.0.0.1
+
+spring:
+  application:
+    name: Tax-Data-Management
+  datasource:
+    url: jdbc:postgresql://localhost:5432/my_db
+    username: postgres
+    password: root
+  jpa:
+    properties:
+      hibernate:
+       dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  cloud:
+    discovery:
+      enabled: true
+  config:
+    import: configserver:http://localhost:8085
